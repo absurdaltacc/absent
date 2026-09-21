@@ -1,0 +1,23 @@
+title: Absent
+description: A private web playground with a simplified black-and-silver shell.
+url: "https://absurdaltacc.github.io"
+baseurl: ""
+repository: absurdaltacc/absurdaltacc.github.io
+
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - README.md
+
+include:
+  - bareworker.js
+  - baremux
+  - epoxy
+  - internal
+  - public
+
+plugins:
+  - jekyll-remote-theme
+
+remote_theme: pages-themes/time-machine@v0.2.0

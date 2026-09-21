@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 :root {
   --bg-body: #050505;
@@ -19,7 +20,6 @@
   --bg-surface-2: #0e0e0e;
   --bg-surface-3: #111111;
   --bg-surface-4: #141414;
-  --bg-surface-hover: #2f2f2f;
   --border-subtle: #ffffff0d;
   --border-faint: #ffffff1c;
   --absent-accent: #edf2f7;
@@ -32,183 +32,66 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 body {
-  background: var(--bg-body);
-  color: var(--text-primary);
-  font-family: var(--font);
-  text-transform: lowercase;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 24px;
+  background: var(--bg-body); color: var(--text-primary);
+  font-family: var(--font); text-transform: lowercase;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 24px;
 }
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
+  content: ""; position: fixed; inset: 0;
   background-image:
     radial-gradient(circle at 50% 50%, #05050580 0, var(--bg-body) 80%),
     linear-gradient(#1b1b1b 1px, transparent 0),
     linear-gradient(90deg, #1b1b1b 1px, transparent 0);
   background-size: 100% 100%, 20px 20px, 20px 20px;
-  pointer-events: none;
-  z-index: 0;
+  pointer-events: none; z-index: 0;
 }
 body > * { position: relative; z-index: 1; }
-.newtab {
-  width: 100%;
-  max-width: 640px;
-  text-align: center;
-}
-.mark {
-  color: var(--absent-accent);
-  margin-bottom: 12px;
-}
+.newtab { width: 100%; max-width: 640px; text-align: center; }
+.mark { color: var(--absent-accent); margin-bottom: 12px; }
 .mark svg { width: 42px; height: 42px; }
-.wordmark {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: .24em;
-  color: var(--absent-accent);
-  margin-bottom: 4px;
-}
-.clock {
-  font-size: 11px;
-  letter-spacing: .22em;
-  color: var(--absent-accent-dim);
-  margin-bottom: 32px;
-}
+.wordmark { font-size: 13px; font-weight: 700; letter-spacing: .24em; color: var(--absent-accent); margin-bottom: 4px; }
+.clock { font-size: 11px; letter-spacing: .22em; color: var(--absent-accent-dim); margin-bottom: 32px; }
 .clock b { color: var(--absent-accent); font-weight: 500; }
 .search-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-faint);
-  border-radius: var(--radius-bar);
-  padding: 0 6px 0 20px;
-  height: 48px;
-  margin-bottom: 28px;
-  transition: border-color 140ms;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-surface-2); border: 1px solid var(--border-faint);
+  border-radius: var(--radius-bar); padding: 0 6px 0 20px; height: 48px;
+  margin-bottom: 28px; transition: border-color .14s;
 }
 .search-bar:focus-within { border-color: var(--absent-accent); }
 .search-bar input {
-  flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text-primary);
-  font-family: var(--font);
-  font-size: 13px;
-  text-transform: lowercase;
-  height: 100%;
+  flex: 1; background: none; border: none; outline: none;
+  color: var(--text-primary); font-family: var(--font); font-size: 13px;
+  text-transform: lowercase; height: 100%;
 }
 .search-bar input::placeholder { color: var(--text-faint); }
 .search-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: var(--absent-accent);
-  color: #000;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  font-size: 13px;
-  transition: background 140ms;
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  background: var(--absent-accent); color: #000; cursor: pointer;
+  display: grid; place-items: center; font-size: 13px; transition: background .14s;
 }
 .search-btn:hover { background: #fff; }
 
-.shortcuts {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 28px;
-}
+.shortcuts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
 .shortcut {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 8px;
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-item);
-  cursor: pointer;
-  transition: background 140ms, border-color 140ms, transform 140ms;
-  text-decoration: none;
-  color: var(--text-primary);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 14px 8px; background: var(--bg-surface-2);
+  border: 1px solid var(--border-subtle); border-radius: var(--radius-item);
+  cursor: pointer; transition: background .14s, border-color .14s, transform .14s;
+  text-decoration: none; color: var(--text-primary);
 }
-.shortcut:hover {
-  background: var(--bg-surface-4);
-  border-color: var(--absent-accent);
-  transform: translateY(-2px);
-}
-.shortcut-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--bg-surface-4);
-  display: grid;
-  place-items: center;
-  color: var(--absent-accent);
-  font-size: 13px;
-}
-.shortcut-name {
-  font-size: 10px;
-  letter-spacing: .14em;
-  color: var(--absent-accent-dim);
-}
+.shortcut:hover { background: var(--bg-surface-4); border-color: var(--absent-accent); transform: translateY(-2px); }
+.shortcut-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--bg-surface-4); display: grid; place-items: center; color: var(--absent-accent); font-size: 13px; }
+.shortcut-name { font-size: 10px; letter-spacing: .14em; color: var(--absent-accent-dim); }
 
-.recent {
-  text-align: left;
-  padding: 20px;
-  background: var(--bg-surface-0);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-item);
-}
-.recent-title {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .24em;
-  color: var(--absent-accent-dim);
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.recent-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.recent-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 140ms;
-  text-decoration: none;
-  color: var(--text-muted);
-  font-size: 12px;
-}
-.recent-item:hover {
-  background: var(--bg-surface-2);
-  color: var(--absent-accent);
-}
-.recent-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--absent-accent-dim);
-  flex-shrink: 0;
-}
-.recent-empty {
-  font-size: 11px;
-  color: var(--text-faint);
-  letter-spacing: .14em;
-}
+.recent { text-align: left; padding: 20px; background: var(--bg-surface-0); border: 1px solid var(--border-subtle); border-radius: var(--radius-item); }
+.recent-title { font-size: 10px; font-weight: 600; letter-spacing: .24em; color: var(--absent-accent-dim); text-transform: uppercase; margin-bottom: 12px; }
+.recent-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.recent-item { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: background .14s; text-decoration: none; color: var(--text-muted); font-size: 12px; }
+.recent-item:hover { background: var(--bg-surface-2); color: var(--absent-accent); }
+.recent-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--absent-accent-dim); flex-shrink: 0; }
+.recent-empty { font-size: 11px; color: var(--text-faint); letter-spacing: .14em; }
 
 @media (max-width: 520px) {
   .shortcuts { grid-template-columns: repeat(2, 1fr); }
@@ -301,9 +184,8 @@ document.getElementById('search-form').addEventListener('submit', (e) => {
   let url = q;
   if (!/^https?:\/\//i.test(url)) {
     if (url.includes('.') && !url.includes(' ')) url = 'https://' + url;
-    else url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
+    else url = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
   }
-  // If embedded in iframe, tell parent to navigate
   if (window.parent !== window) {
     window.parent.postMessage({ type: 'absent.navigate', url }, '*');
   } else {
@@ -314,6 +196,5 @@ document.getElementById('search-form').addEventListener('submit', (e) => {
 renderShortcuts();
 renderRecent();
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
 </body>
 </html>

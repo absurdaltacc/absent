@@ -4,16 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Absent</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23edf2f7' stroke-width='1.5'%3E%3Ccircle cx='12' cy='12' r='2.5'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4.5'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4.5' transform='rotate(60 12 12)'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4.5' transform='rotate(120 12 12)'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="/public/absent-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/gh/Destroyed12121/Staticsj@main/JS/scramjet.all.js" defer></script>
-<script type="module">
-  import * as BareMux from "https://cdn.jsdelivr.net/npm/@mercuryworkshop/bare-mux/dist/index.mjs";
-  window.BareMux = BareMux;
-</script>
 <style>
 :root {
   --bg-body: #050505;
@@ -28,446 +23,110 @@
   --bg-surface-2: #0e0e0e;
   --bg-surface-3: #111111;
   --bg-surface-4: #141414;
-  --bg-surface-5: #171717;
   --bg-surface-hover: #2f2f2f;
   --border-subtle: #ffffff0d;
   --border-faint: #ffffff1c;
   --border-medium: #2b2b2b;
   --absent-accent: #edf2f7;
   --absent-accent-dim: #66737e;
-  --radius-frame: 6px;
-  --radius-tooltip: 8px;
   --radius-item: 10px;
-  --radius-control: 15px;
-  --radius-dialog: 20px;
+  --radius-tooltip: 8px;
   --radius-bar: 25px;
   --font: 'Lexend', sans-serif;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  background-color: var(--bg-body);
-  color: var(--text-primary);
-  font-family: var(--font);
-  text-transform: lowercase;
-  display: flex;
-  position: relative;
-}
-
+html, body { height: 100%; overflow: hidden; }
+body { background-color: var(--bg-body); color: var(--text-primary); font-family: var(--font); text-transform: lowercase; display: flex; }
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
+  content: ""; position: fixed; inset: 0;
   background-image:
     radial-gradient(circle at 50% 50%, #05050580 0, var(--bg-body) 80%),
     linear-gradient(var(--bg-body-grid) 1px, transparent 0),
     linear-gradient(90deg, var(--bg-body-grid) 1px, transparent 0);
   background-size: 100% 100%, 20px 20px, 20px 20px;
-  pointer-events: none;
-  z-index: 0;
+  pointer-events: none; z-index: 0;
 }
-
 body > * { position: relative; z-index: 1; }
-
 ::selection { background: var(--absent-accent); color: #000; }
-
 ::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
 
-/* ── SIDEBAR ── */
-.sidebar {
-  width: 220px;
-  flex-shrink: 0;
-  background: var(--bg-surface-0);
-  border-right: 1px solid var(--border-subtle);
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  transition: margin-left 0.14s cubic-bezier(0.4,0,0.2,1), opacity 0.14s;
-  overflow: hidden;
-  white-space: nowrap;
-}
+.sidebar { width: 220px; flex-shrink: 0; background: var(--bg-surface-0); border-right: 1px solid var(--border-subtle); display: flex; flex-direction: column; padding: 10px; transition: margin-left .14s cubic-bezier(.4,0,.2,1), opacity .14s; white-space: nowrap; }
 .sidebar.hidden { margin-left: -220px; opacity: 0; }
-
-.sidebar-mark {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 10px 24px;
-  color: var(--absent-accent);
-}
+.sidebar-mark { display: flex; align-items: center; gap: 10px; padding: 14px 10px 24px; color: var(--absent-accent); }
 .sidebar-mark svg { width: 22px; height: 22px; }
-.sidebar-mark .wordmark {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: .24em;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: var(--radius-item);
-  color: var(--text-muted);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .04em;
-  cursor: pointer;
-  transition: background 140ms, color 140ms;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  font-family: var(--font);
-}
+.sidebar-mark .wordmark { font-size: 13px; font-weight: 700; letter-spacing: .24em; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--radius-item); color: var(--text-muted); font-size: 12px; font-weight: 500; letter-spacing: .04em; cursor: pointer; transition: background .14s, color .14s; border: none; background: none; width: 100%; text-align: left; font-family: var(--font); text-transform: lowercase; }
 .nav-item i { width: 16px; font-size: 12px; text-align: center; }
-.nav-item:hover, .nav-item.active {
-  background: var(--bg-surface-2);
-  color: var(--absent-accent);
-}
+.nav-item:hover, .nav-item.active { background: var(--bg-surface-2); color: var(--absent-accent); }
 .nav-item.active { background: var(--bg-surface-3); }
-
-.sidebar-bottom {
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-subtle);
-}
+.sidebar-bottom { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
 .sidebar-bottom .nav-item { font-size: 11px; }
 
-/* ── MAIN ── */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  height: 100%;
-}
-
-.topbar {
-  height: 76px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 20px;
-  border-bottom: 1px solid var(--border-subtle);
-  background: color-mix(in srgb, var(--bg-body) 80%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.hamburger {
-  display: none;
-  width: 38px;
-  height: 30px;
-  border: 1px solid var(--border-faint);
-  border-radius: 7px;
-  background: var(--bg-surface-2);
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 3px;
-}
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100%; }
+.topbar { height: 76px; flex-shrink: 0; display: flex; align-items: center; gap: 12px; padding: 0 20px; border-bottom: 1px solid var(--border-subtle); background: color-mix(in srgb, var(--bg-body) 80%, transparent); backdrop-filter: blur(12px); }
+.hamburger { display: none; width: 38px; height: 30px; border: 1px solid var(--border-faint); border-radius: 7px; background: var(--bg-surface-2); cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
 .hamburger span { display: block; width: 14px; height: 1px; background: var(--text-dimmed); }
-
-.url-bar {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-faint);
-  border-radius: var(--radius-bar);
-  padding: 0 6px 0 16px;
-  height: 40px;
-  transition: border-color 140ms;
-}
+.url-bar { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--bg-surface-2); border: 1px solid var(--border-faint); border-radius: var(--radius-bar); padding: 0 6px 0 16px; height: 40px; transition: border-color .14s; }
 .url-bar:focus-within { border-color: var(--absent-accent); }
-.url-bar input {
-  flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text-primary);
-  font-family: var(--font);
-  font-size: 13px;
-  text-transform: lowercase;
-  letter-spacing: .02em;
-  height: 100%;
-}
+.url-bar input { flex: 1; background: none; border: none; outline: none; color: var(--text-primary); font-family: var(--font); font-size: 13px; text-transform: lowercase; height: 100%; }
 .url-bar input::placeholder { color: var(--text-faint); }
-
-.icon-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: var(--bg-surface-3);
-  color: var(--text-muted);
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  font-size: 12px;
-  transition: background 140ms, color 140ms;
-}
+.icon-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-surface-3); color: var(--text-muted); cursor: pointer; display: grid; place-items: center; font-size: 12px; transition: background .14s, color .14s; }
 .icon-btn:hover { background: var(--bg-surface-hover); color: var(--absent-accent); }
 .icon-btn.primary { background: var(--absent-accent); color: #000; }
 .icon-btn.primary:hover { background: #fff; }
 
-/* ── CONTENT ── */
-.content {
-  flex: 1;
-  overflow-y: auto;
-  position: relative;
-}
-
-/* ── HOME VIEW ── */
+.content { flex: 1; overflow-y: auto; position: relative; }
 .view { display: none; height: 100%; }
 .view.active { display: flex; flex-direction: column; }
 
-.home {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  max-width: 760px;
-  padding: 10vh 20px 40px;
-  width: 100%;
-  text-align: center;
-}
-
+.home { align-items: center; display: flex; flex-direction: column; margin: 0 auto; max-width: 760px; padding: 10vh 20px 40px; width: 100%; text-align: center; }
 .home-mark { color: var(--absent-accent); margin-bottom: 16px; }
 .home-mark svg { width: 48px; height: 48px; }
-
-.home-wordmark {
-  color: var(--absent-accent);
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: .24em;
-  margin-bottom: 30px;
-}
-.home-wordmark span {
-  color: var(--absent-accent-dim);
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: .16em;
-  margin-left: 8px;
-}
-
-.home-search {
-  max-width: 520px;
-  width: 100%;
-  margin: 0 0 8px;
-}
-.home-search input {
-  width: 100%;
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-faint);
-  border-radius: var(--radius-tooltip);
-  padding: 15px 18px;
-  color: var(--text-primary);
-  font-family: var(--font);
-  font-size: 13px;
-  outline: none;
-  text-transform: lowercase;
-  transition: border-color 140ms;
-}
+.home-wordmark { color: var(--absent-accent); font-size: 15px; font-weight: 700; letter-spacing: .24em; margin-bottom: 30px; }
+.home-wordmark span { color: var(--absent-accent-dim); font-size: 9px; font-weight: 400; letter-spacing: .16em; margin-left: 8px; }
+.home-search { max-width: 520px; width: 100%; margin: 0 0 8px; }
+.home-search input { width: 100%; background: var(--bg-surface-2); border: 1px solid var(--border-faint); border-radius: var(--radius-tooltip); padding: 15px 18px; color: var(--text-primary); font-family: var(--font); font-size: 13px; outline: none; text-transform: lowercase; transition: border-color .14s; }
 .home-search input:focus { border-color: var(--absent-accent); }
 .home-search input::placeholder { color: var(--text-faint); }
+.home-hint { color: var(--absent-accent-dim); font-size: 10px; margin-bottom: 28px; }
+.apps { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 12px; max-width: 520px; }
+.app { align-items: center; background: var(--bg-surface-2); border: 1px solid var(--border-faint); border-radius: var(--radius-tooltip); color: var(--text-dimmed); cursor: pointer; display: flex; font: inherit; font-size: 11px; gap: 9px; padding: 9px 12px; transition: background .16s, border-color .16s, color .16s, transform .16s; text-transform: lowercase; }
+.app:hover { background: var(--bg-surface-4); border-color: var(--absent-accent); color: var(--absent-accent); transform: translateY(-2px); }
+.app-icon { align-items: center; background: var(--bg-surface-4); border-radius: 5px; color: var(--absent-accent); display: inline-flex; font-size: 11px; height: 22px; justify-content: center; width: 22px; }
 
-.home-hint {
-  color: var(--absent-accent-dim);
-  font-size: 10px;
-  margin-bottom: 28px;
-}
+.browser-frame-wrap { flex: 1; position: relative; background: var(--bg-body); }
+.browser-frame-wrap iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
 
-.apps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 12px;
-  max-width: 520px;
-}
-.app {
-  align-items: center;
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-faint);
-  border-radius: var(--radius-tooltip);
-  color: var(--text-dimmed);
-  cursor: pointer;
-  display: flex;
-  font: inherit;
-  font-size: 11px;
-  gap: 9px;
-  padding: 9px 12px;
-  transition: background 160ms, border-color 160ms, color 160ms, transform 160ms;
-  text-transform: lowercase;
-}
-.app:hover, .app:focus-visible {
-  background: var(--bg-surface-4);
-  border-color: var(--absent-accent);
-  color: var(--absent-accent);
-  outline: none;
-  transform: translateY(-2px);
-}
-.app-icon {
-  align-items: center;
-  background: var(--bg-surface-4);
-  border-radius: 5px;
-  color: var(--absent-accent);
-  display: inline-flex;
-  font-size: 11px;
-  height: 22px;
-  justify-content: center;
-  width: 22px;
-}
-
-/* ── BROWSER VIEW ── */
-.browser-frame-wrap {
-  flex: 1;
-  position: relative;
-  background: var(--bg-body);
-}
-.browser-frame-wrap iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-  background: #fff;
-}
-
-/* ── GAMES / ANIME / MUSIC GRID ── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
-  padding: 24px 28px 60px;
-}
-.tile {
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-item);
-  padding: 14px;
-  cursor: pointer;
-  transition: background 160ms, border-color 160ms, transform 160ms;
-  text-align: left;
-  color: var(--text-primary);
-  font-family: var(--font);
-  text-transform: lowercase;
-}
-.tile:hover {
-  background: var(--bg-surface-4);
-  border-color: var(--absent-accent);
-  transform: translateY(-2px);
-}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; padding: 24px 28px 60px; }
+.tile { background: var(--bg-surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-item); padding: 14px; cursor: pointer; transition: background .16s, border-color .16s, transform .16s; text-align: left; color: var(--text-primary); font-family: var(--font); text-transform: lowercase; }
+.tile:hover { background: var(--bg-surface-4); border-color: var(--absent-accent); transform: translateY(-2px); }
 .tile .tile-name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
 .tile .tile-desc { font-size: 10px; color: var(--text-faint); }
 
-/* ── SETTINGS PANEL ── */
-.settings-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 380px;
-  max-width: 92vw;
-  height: 100%;
-  background: var(--bg-surface-1);
-  border-left: 1px solid var(--border-faint);
-  padding: 28px 24px;
-  overflow-y: auto;
-  transform: translateX(100%);
-  transition: transform 220ms cubic-bezier(0.4,0,0.2,1);
-  z-index: 50;
-}
+.settings-panel { position: fixed; top: 0; right: 0; width: 380px; max-width: 92vw; height: 100%; background: var(--bg-surface-1); border-left: 1px solid var(--border-faint); padding: 28px 24px; overflow-y: auto; transform: translateX(100%); transition: transform .22s cubic-bezier(.4,0,.2,1); z-index: 50; }
 .settings-panel.open { transform: translateX(0); }
-.settings-panel h2 {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .24em;
-  color: var(--absent-accent);
-  text-transform: uppercase;
-  margin-bottom: 24px;
-}
-.settings-label {
-  display: block;
-  font-size: 10px;
-  letter-spacing: .18em;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  margin: 18px 0 8px;
-}
-.settings-panel select,
-.settings-panel input {
-  width: 100%;
-  background: var(--bg-surface-3);
-  border: 1px solid var(--border-faint);
-  border-radius: var(--radius-frame);
-  padding: 10px 12px;
-  color: var(--text-primary);
-  font-family: var(--font);
-  font-size: 12px;
-  outline: none;
-  text-transform: lowercase;
-}
-.settings-panel select:focus,
-.settings-panel input:focus { border-color: var(--absent-accent); }
-
-.settings-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 16px;
-  cursor: pointer;
-}
+.settings-panel h2 { font-size: 12px; font-weight: 600; letter-spacing: .24em; color: var(--absent-accent); text-transform: uppercase; margin-bottom: 24px; }
+.settings-label { display: block; font-size: 10px; letter-spacing: .18em; color: var(--text-faint); text-transform: uppercase; margin: 18px 0 8px; }
+.settings-panel select, .settings-panel input { width: 100%; background: var(--bg-surface-3); border: 1px solid var(--border-faint); border-radius: 6px; padding: 10px 12px; color: var(--text-primary); font-family: var(--font); font-size: 12px; outline: none; text-transform: lowercase; }
+.settings-panel select:focus, .settings-panel input:focus { border-color: var(--absent-accent); }
+.settings-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-muted); font-size: 16px; cursor: pointer; }
 .settings-close:hover { color: var(--absent-accent); }
 
-/* ── BACKDROP ── */
-.backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms;
-  z-index: 40;
-}
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.6); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 40; }
 .backdrop.open { opacity: 1; pointer-events: auto; }
 
-/* ── TOAST ── */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--bg-surface-3);
-  border: 1px solid var(--border-faint);
-  border-radius: var(--radius-pill);
-  color: var(--absent-accent);
-  padding: 10px 20px;
-  font-size: 11px;
-  letter-spacing: .1em;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms, transform 200ms;
-  z-index: 60;
-}
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bg-surface-3); border: 1px solid var(--border-faint); border-radius: 999px; color: var(--absent-accent); padding: 10px 20px; font-size: 11px; letter-spacing: .1em; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 60; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ── RESPONSIVE ── */
+.boot-overlay { position: fixed; inset: 0; background: var(--bg-body); z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; transition: opacity .4s, visibility .4s; }
+.boot-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.boot-overlay .mark { color: var(--absent-accent); }
+.boot-overlay .mark svg { width: 42px; height: 42px; animation: spin 3s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.boot-overlay .label { font-size: 11px; letter-spacing: .32em; color: var(--absent-accent-dim); text-transform: uppercase; }
+.boot-overlay .status { font-size: 10px; letter-spacing: .2em; color: var(--text-faint); }
+
 @media (max-width: 720px) {
   .sidebar { position: fixed; z-index: 30; height: 100%; }
   .sidebar:not(.hidden) { box-shadow: 20px 0 40px rgba(0,0,0,.6); }
@@ -478,7 +137,19 @@ body > * { position: relative; z-index: 1; }
 </head>
 <body>
 
-<!-- SIDEBAR -->
+<div class="boot-overlay" id="boot-overlay">
+  <div class="mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <circle cx="12" cy="12" r="2.5"/>
+      <ellipse cx="12" cy="12" rx="10" ry="4.5"/>
+      <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/>
+      <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"/>
+    </svg>
+  </div>
+  <div class="label">absent</div>
+  <div class="status" id="boot-status">initializing…</div>
+</div>
+
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-mark">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -489,34 +160,32 @@ body > * { position: relative; z-index: 1; }
     </svg>
     <span class="wordmark">absent</span>
   </div>
-
   <button class="nav-item active" data-view="home"><i class="fa-solid fa-house"></i> home</button>
   <button class="nav-item" data-view="browser"><i class="fa-solid fa-globe"></i> browser</button>
   <button class="nav-item" data-view="games"><i class="fa-solid fa-gamepad"></i> games</button>
   <button class="nav-item" data-view="anime"><i class="fa-solid fa-tv"></i> anime</button>
   <button class="nav-item" data-view="music"><i class="fa-solid fa-music"></i> music</button>
-
   <div class="sidebar-bottom">
+    <button class="nav-item" onclick="location.href='/internal/newtab.html'"><i class="fa-solid fa-plus"></i> new tab</button>
+    <button class="nav-item" onclick="location.href='/internal/storage.html'"><i class="fa-solid fa-database"></i> storage</button>
+    <button class="nav-item" onclick="location.href='/internal/extensions.html'"><i class="fa-solid fa-puzzle-piece"></i> extensions</button>
+    <button class="nav-item" onclick="location.href='/internal/about.html'"><i class="fa-solid fa-circle-info"></i> about</button>
     <button class="nav-item" id="open-settings"><i class="fa-solid fa-gear"></i> settings</button>
   </div>
 </aside>
 
-<!-- MAIN -->
 <div class="main">
-
   <div class="topbar">
     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     <div class="url-bar">
-      <input type="text" id="url-input" placeholder="search or enter url" spellcheck="false">
-      <button class="icon-btn" id="go-btn" title="go"><i class="fa-solid fa-arrow-right"></i></button>
+      <input type="text" id="url-input" placeholder="search or enter url" spellcheck="false" autocomplete="off">
+      <button class="icon-btn" id="go-btn"><i class="fa-solid fa-arrow-right"></i></button>
     </div>
-    <button class="icon-btn" id="reload-btn" title="reload"><i class="fa-solid fa-rotate-right"></i></button>
-    <button class="icon-btn" id="home-btn" title="home"><i class="fa-solid fa-house"></i></button>
+    <button class="icon-btn" id="reload-btn"><i class="fa-solid fa-rotate-right"></i></button>
+    <button class="icon-btn" id="home-btn"><i class="fa-solid fa-house"></i></button>
   </div>
 
   <div class="content">
-
-    <!-- HOME -->
     <section class="view active" id="view-home">
       <div class="home">
         <div class="home-mark">
@@ -528,31 +197,25 @@ body > * { position: relative; z-index: 1; }
           </svg>
         </div>
         <div class="home-wordmark">absent <span>v1.0</span></div>
-
         <div class="home-search">
-          <input type="text" id="home-search-input" placeholder="search or enter url" spellcheck="false">
+          <input type="text" id="home-search-input" placeholder="search or enter url" spellcheck="false" autocomplete="off">
         </div>
         <div class="home-hint">press enter to browse</div>
-
         <div class="apps">
           <button class="app" data-app="games"><span class="app-icon"><i class="fa-solid fa-gamepad"></i></span> games</button>
           <button class="app" data-app="anime"><span class="app-icon"><i class="fa-solid fa-tv"></i></span> anime</button>
           <button class="app" data-app="music"><span class="app-icon"><i class="fa-solid fa-music"></i></span> music</button>
           <button class="app" data-app="browser"><span class="app-icon"><i class="fa-solid fa-globe"></i></span> browser</button>
-          <button class="app" data-app="games"><span class="app-icon"><i class="fa-solid fa-dice"></i></span> arcade</button>
-          <button class="app" data-app="browser"><span class="app-icon"><i class="fa-solid fa-cloud"></i></span> cloud</button>
+          <button class="app" onclick="location.href='/internal/newtab.html'"><span class="app-icon"><i class="fa-solid fa-plus"></i></span> new tab</button>
+          <button class="app" onclick="location.href='/internal/storage.html'"><span class="app-icon"><i class="fa-solid fa-database"></i></span> storage</button>
         </div>
       </div>
     </section>
 
-    <!-- BROWSER -->
     <section class="view" id="view-browser">
-      <div class="browser-frame-wrap">
-        <iframe id="browser-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads"></iframe>
-      </div>
+      <div class="browser-frame-wrap" id="browser-frame-wrap"></div>
     </section>
 
-    <!-- GAMES -->
     <section class="view" id="view-games">
       <div class="grid">
         <button class="tile" data-url="https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/166.html"><div class="tile-name">fnaf</div><div class="tile-desc">classic horror</div></button>
@@ -568,17 +231,14 @@ body > * { position: relative; z-index: 1; }
       </div>
     </section>
 
-    <!-- ANIME -->
     <section class="view" id="view-anime">
       <div class="grid">
         <button class="tile" data-url="https://animepahe.com"><div class="tile-name">animepahe</div><div class="tile-desc">streaming</div></button>
         <button class="tile" data-url="https://9anime.to"><div class="tile-name">9anime</div><div class="tile-desc">streaming</div></button>
         <button class="tile" data-url="https://gogoanime.bid"><div class="tile-name">gogoanime</div><div class="tile-desc">streaming</div></button>
-        <button class="tile" data-url="https://zoro.to"><div class="tile-name">zoro</div><div class="tile-desc">streaming</div></button>
       </div>
     </section>
 
-    <!-- MUSIC -->
     <section class="view" id="view-music">
       <div class="grid">
         <button class="tile" data-url="https://open.spotify.com"><div class="tile-name">spotify</div><div class="tile-desc">music</div></button>
@@ -586,101 +246,177 @@ body > * { position: relative; z-index: 1; }
         <button class="tile" data-url="https://soundcloud.com"><div class="tile-name">soundcloud</div><div class="tile-desc">music</div></button>
       </div>
     </section>
-
   </div>
 </div>
 
-<!-- SETTINGS -->
 <div class="backdrop" id="backdrop"></div>
 <aside class="settings-panel" id="settings">
   <button class="settings-close" id="settings-close"><i class="fa-solid fa-xmark"></i></button>
   <h2>proxy settings</h2>
-
-  <label class="settings-label" for="wisp-select">select server</label>
+  <label class="settings-label" for="wisp-select">server</label>
   <select id="wisp-select">
     <option value="wss://wisp.mercurywork.shop/">mercury workshop</option>
     <option value="wss://wisp.destroyed12121.com/">destroyed12121</option>
-    <option value="wss://wisp.flow-works.me/">flow works</option>
-    <option value="custom">custom server</option>
+    <option value="wss://glseries.net/wisp/">gl series</option>
+    <option value="wss://wispserver.dev/wisp/">wispserver</option>
+    <option value="wss://admin.proxy.hydrovolter.com/scramjet/wisp/">hydrovolter</option>
+    <option value="custom">custom</option>
   </select>
-
-  <label class="settings-label" for="wisp-custom">custom server</label>
+  <label class="settings-label" for="wisp-custom">custom url</label>
   <input type="text" id="wisp-custom" placeholder="wss://your-server.com/wisp/" disabled>
-
-  <label class="settings-label">lower ping = faster browsing</label>
-  <button class="icon-btn primary" id="apply-wisp" style="width:100%;border-radius:var(--radius-frame);height:38px;font-size:11px;letter-spacing:.14em;text-transform:lowercase;">apply & reload</button>
+  <button class="icon-btn primary" id="apply-wisp" style="width:100%;border-radius:6px;height:38px;font-size:11px;letter-spacing:.14em;text-transform:lowercase;margin-top:18px;">apply & reload</button>
 </aside>
 
 <div class="toast" id="toast"></div>
 
-<script>
-/* ============================================================
-   ABSENT — proxy shell
-   ============================================================ */
+<script src="https://cdn.jsdelivr.net/npm/@mercuryworkshop/bare-mux@2.1.7/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Destroyed12121/Staticsj@main/JS/scramjet.all.js"></script>
 
+<script>
 const state = {
   wisp: localStorage.getItem('absent.wisp') || 'wss://wisp.mercurywork.shop/',
-  currentView: 'home'
+  wispName: localStorage.getItem('absent.wispName') || 'wss://wisp.mercurywork.shop/',
+  currentView: 'home',
+  ready: false
 };
 
-const $ = (sel) => document.querySelector(sel);
+const $ = (s) => document.querySelector(s);
+let scramjet = null;
+let scramjetFrame = null;
 
-// ── NAV ──
-function setView(name) {
-  state.currentView = name;
-  document.querySelectorAll('.view').forEach((v) => v.classList.toggle('active', v.id === 'view-' + name));
-  document.querySelectorAll('.nav-item[data-view]').forEach((b) => b.classList.toggle('active', b.dataset.view === name));
-  if (window.innerWidth <= 720) $('#sidebar').classList.add('hidden');
+function setBootStatus(msg) {
+  const el = $('#boot-status');
+  if (el) el.textContent = msg;
+}
+function hideBoot() {
+  const el = $('#boot-overlay');
+  if (el) el.classList.add('hidden');
 }
 
-document.querySelectorAll('.nav-item[data-view]').forEach((btn) => {
-  btn.addEventListener('click', () => setView(btn.dataset.view));
-});
+async function bootScramjet() {
+  setBootStatus('loading scramjet…');
+  if (!window.$scramjetLoadController) {
+    setBootStatus('scramjet failed to load');
+    console.error('[absent] scramjet.all.js missing');
+    return;
+  }
 
-document.querySelectorAll('.app').forEach((btn) => {
-  btn.addEventListener('click', () => setView(btn.dataset.app));
-});
+  setBootStatus('setting up transport…');
+  try {
+    const connection = new window.BareMux.BareMuxConnection('/baremux/worker.js');
+    await connection.setTransport('/epoxy/index.mjs', [{ wisp: state.wisp }]);
+    console.log('[absent] transport set:', state.wisp);
+  } catch (e) {
+    console.warn('[absent] transport setup failed', e);
+    setBootStatus('transport failed — check console');
+  }
 
-// ── SIDEBAR TOGGLE (mobile) ──
-$('#hamburger').addEventListener('click', () => $('#sidebar').classList.toggle('hidden'));
+  setBootStatus('registering service worker…');
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator.serviceWorker.register('/bareworker.js', { scope: '/' });
+      await navigator.serviceWorker.ready;
+    } catch (e) {
+      console.warn('[absent] sw registration failed', e);
+    }
+  }
 
-// ── NAVIGATION ──
-function navigate(input) {
-  if (!input) return;
+  setBootStatus('initializing scramjet…');
+  try {
+    const { ScramjetController } = $scramjetLoadController();
+    scramjet = new ScramjetController({
+      files: {
+        wasm: 'https://cdn.jsdelivr.net/gh/Destroyed12121/Staticsj@main/JS/scramjet.wasm.wasm',
+        all:  'https://cdn.jsdelivr.net/gh/Destroyed12121/Staticsj@main/JS/scramjet.all.js',
+        sync: 'https://cdn.jsdelivr.net/gh/Destroyed12121/Staticsj@main/JS/scramjet.sync.js'
+      },
+      prefix: '/scramjet/'
+    });
+    await scramjet.init();
+    console.log('[absent] scramjet controller ready');
+  } catch (e) {
+    console.error('[absent] scramjet init failed', e);
+    setBootStatus('scramjet init failed');
+    return;
+  }
+
+  state.ready = true;
+  setBootStatus('ready');
+  setTimeout(hideBoot, 400);
+  window.dispatchEvent(new Event('scramjet-ready'));
+  restoreFromHash();
+}
+
+function ensureFrame() {
+  if (scramjetFrame) return scramjetFrame;
+  if (!scramjet) return null;
+  const wrap = $('#browser-frame-wrap');
+  wrap.innerHTML = '';
+  scramjetFrame = scramjet.createFrame();
+  scramjetFrame.frame.id = 'browser-frame';
+  scramjetFrame.frame.style.cssText = 'width:100%;height:100%;border:0;background:#fff;display:block;';
+  wrap.appendChild(scramjetFrame.frame);
+  return scramjetFrame;
+}
+
+function normalizeUrl(input) {
+  if (!input) return null;
   let url = input.trim();
   if (!/^https?:\/\//i.test(url)) {
     if (url.includes('.') && !url.includes(' ')) url = 'https://' + url;
-    else url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
+    else url = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
   }
+  return url;
+}
+
+function navigate(input) {
+  const url = normalizeUrl(input);
+  if (!url) return;
   setView('browser');
-  const frame = $('#browser-frame');
-  frame.src = url;
+  if (!state.ready) {
+    showToast('booting — try again');
+    window.addEventListener('scramjet-ready', () => navigate(url), { once: true });
+    return;
+  }
+  const frame = ensureFrame();
+  if (!frame) { showToast('scramjet unavailable'); return; }
+  frame.go(url);
   $('#url-input').value = url;
   history.replaceState(null, '', '#browse=' + encodeURIComponent(url));
 }
 
-$('#go-btn').addEventListener('click', () => navigate($('#url-input').value));
-$('#url-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') navigate($('#url-input').value); });
-$('#home-search-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') navigate($('#home-search-input').value); });
+function setView(name) {
+  state.currentView = name;
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+  document.querySelectorAll('.nav-item[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  if (window.innerWidth <= 720) $('#sidebar').classList.add('hidden');
+}
 
-$('#reload-btn').addEventListener('click', () => {
-  const frame = $('#browser-frame');
-  if (frame.src && frame.src !== 'about:blank') frame.src = frame.src;
+document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => setView(btn.dataset.view));
 });
-$('#home-btn').addEventListener('click', () => setView('home'));
-
-// Tile clicks
-document.querySelectorAll('.tile').forEach((tile) => {
+document.querySelectorAll('.app').forEach(btn => {
+  if (btn.dataset.app) btn.addEventListener('click', () => setView(btn.dataset.app));
+});
+document.querySelectorAll('.tile').forEach(tile => {
   tile.addEventListener('click', () => navigate(tile.dataset.url));
 });
 
-// ── SETTINGS ──
+$('#hamburger').addEventListener('click', () => $('#sidebar').classList.toggle('hidden'));
+$('#go-btn').addEventListener('click', () => navigate($('#url-input').value));
+$('#url-input').addEventListener('keydown', e => { if (e.key === 'Enter') navigate($('#url-input').value); });
+$('#home-search-input').addEventListener('keydown', e => { if (e.key === 'Enter') navigate($('#home-search-input').value); });
+$('#home-btn').addEventListener('click', () => setView('home'));
+$('#reload-btn').addEventListener('click', () => {
+  if (scramjetFrame && $('#url-input').value) scramjetFrame.go($('#url-input').value);
+});
+
 function openSettings() {
   $('#settings').classList.add('open');
   $('#backdrop').classList.add('open');
-  $('#wisp-select').value = localStorage.getItem('absent.wispName') || 'wss://wisp.mercurywork.shop/';
-  $('#wisp-custom').value = localStorage.getItem('absent.wisp') || '';
-  $('#wisp-custom').disabled = $('#wisp-select').value !== 'custom';
+  $('#wisp-select').value = state.wispName;
+  $('#wisp-custom').value = state.wisp;
+  $('#wisp-custom').disabled = state.wispName !== 'custom';
 }
 function closeSettings() {
   $('#settings').classList.remove('open');
@@ -689,23 +425,44 @@ function closeSettings() {
 $('#open-settings').addEventListener('click', openSettings);
 $('#settings-close').addEventListener('click', closeSettings);
 $('#backdrop').addEventListener('click', closeSettings);
-
-$('#wisp-select').addEventListener('change', (e) => {
+$('#wisp-select').addEventListener('change', e => {
   $('#wisp-custom').disabled = e.target.value !== 'custom';
 });
-
 $('#apply-wisp').addEventListener('click', () => {
   const sel = $('#wisp-select').value;
   const custom = $('#wisp-custom').value.trim();
   const url = sel === 'custom' ? custom : sel;
-  if (!url) { showToast('enter a wisp server url'); return; }
+  if (!url) { showToast('enter a wisp url'); return; }
   localStorage.setItem('absent.wisp', url);
   localStorage.setItem('absent.wispName', sel);
-  showToast('wisp saved — reloading');
-  setTimeout(() => location.reload(), 700);
+  showToast('saved — reloading');
+  setTimeout(() => location.reload(), 600);
 });
 
-// ── TOAST ──
+function restoreFromHash() {
+  const m = location.hash.match(/^#browse=(.+)$/);
+  if (!m) return;
+  const url = decodeURIComponent(m[1]);
+  $('#url-input').value = url;
+  setView('browser');
+  if (state.ready) {
+    const frame = ensureFrame();
+    if (frame) frame.go(url);
+  } else {
+    window.addEventListener('scramjet-ready', () => {
+      const frame = ensureFrame();
+      if (frame) frame.go(url);
+    }, { once: true });
+  }
+}
+window.addEventListener('hashchange', restoreFromHash);
+
+window.addEventListener('message', e => {
+  if (e.data?.type === 'absent.navigate' && typeof e.data.url === 'string') {
+    navigate(e.data.url);
+  }
+});
+
 let toastTimer;
 function showToast(msg) {
   const t = $('#toast');
@@ -715,46 +472,8 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-// ── SCRAMJET BOOT ──
-async function bootScramjet() {
-  if (!window.BareMux) { console.warn('[absent] BareMux not loaded'); return; }
-  if (!window.$scramjetLoadController) { console.warn('[absent] Scramjet not loaded'); return; }
-
-  try {
-    const connection = new window.BareMux.BareMuxConnection('/baremux/worker.js');
-    await connection.setTransport('/epoxy/index.mjs', [{ wisp: state.wisp }]);
-    console.log('[absent] transport set to', state.wisp);
-  } catch (e) {
-    console.warn('[absent] transport setup failed', e);
-  }
-
-  try {
-    if ('serviceWorker' in navigator) {
-      await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-      console.log('[absent] service worker registered');
-    }
-  } catch (e) {
-    console.warn('[absent] sw registration failed', e);
-  }
-}
-
-// ── HASH ROUTING ──
-function restoreFromHash() {
-  const m = location.hash.match(/^#browse=(.+)$/);
-  if (m) {
-    const url = decodeURIComponent(m[1]);
-    $('#url-input').value = url;
-    setView('browser');
-    $('#browser-frame').src = url;
-  }
-}
-window.addEventListener('hashchange', restoreFromHash);
-restoreFromHash();
-
-// ── BOOT ──
 window.addEventListener('load', () => {
   bootScramjet();
-  console.log('[absent] ready · wisp =', state.wisp);
 });
 </script>
 </body>

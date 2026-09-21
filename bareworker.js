@@ -1,6 +1,94 @@
-/* ============================================================
-   ABSENT — BareMux Worker
-   Updated BroadcastChannel to "absent-mux"
-   ============================================================ */
+/* Absent — service worker */
 
-!function(){"use strict";const e=MessagePort.prototype.postMessage;let t=null;function a(e,t,a){console.error(`error while processing '${a}': `,t),e.postMessage({type:"error",error:t})}async function n(a,n,s){const o=await s.request(new URL(a.fetch.remote),a.fetch.method,a.fetch.body,a.fetch.headers,null);if(!function(){if(null===t){const a=new MessageChannel,n=new ReadableStream;let s;try{e.call(a.port1,n,[n]),s=!0}catch(e){s=!1}return t=s,s}return t}()&&o.body instanceof ReadableStream){const e=new Response(o.body);o.body=await e.arrayBuffer()}o.body instanceof ReadableStream||o.body instanceof ArrayBuffer?e.call(n,{type:"fetch",fetch:o},[o.body]):e.call(n,{type:"fetch",fetch:o})}let s=null,o="";function c(){return new Error("there are no bare clients",{cause:"No BareTransport was set. Try creating a BareMuxConnection and calling setTransport() or setManualTransport() on it before using BareClient."})}function r(t,a){const n=s;let o=[a];t.fetch?.body&&o.push(t.fetch.body),t.websocket?.channel&&o.push(t.websocket.channel),e.call(n,{message:t,port:a},o)}function l(t){t.onmessage=async t=>{const l=t.data.port,i=t.data.message;if("ping"===i.type)e.call(l,{type:"pong"});else if("set"===i.type)try{const t=async function(){}.constructor;if("bare-mux-remote"===i.client.function)s=i.client.args[0],o=`bare-mux-remote (${i.client.args[1]})`;else{const e=new t(i.client.function),[a,n]=await e();s=new a(...i.client.args),o=n}console.log("set transport to ",s,o),e.call(l,{type:"set"})}catch(e){a(l,e,"set")}else if("get"===i.type)l.postMessage({type:"get",name:o});else if("fetch"===i.type)try{if(!s)throw c();if(s instanceof MessagePort)return void r(i,l);s.ready||await s.init(),await n(i,l,s)}catch(e){a(l,e,"fetch")}else if("websocket"===i.type)try{if(!s)throw c();if(s instanceof MessagePort)return void r(i,l);s.ready||await s.init(),await async function(t,a,n){const[s,o]=n.connect(new URL(t.websocket.url),t.websocket.protocols,t.websocket.requestHeaders,(a=>{e.call(t.websocket.channel,{type:"open",args:[a]})}),(a=>{a instanceof ArrayBuffer?e.call(t.websocket.channel,{type:"message",args:[a]},[a]):e.call(t.websocket.channel,{type:"message",args:[a]})}),((a,n)=>{e.call(t.websocket.channel,{type:"close",args:[a,n]})}),(a=>{e.call(t.websocket.channel,{type:"error",args:[a]})}));t.websocket.channel.onmessage=e=>{"data"===e.data.type?s(e.data.data):"close"===e.data.type&&o(e.data.closeCode,e.data.closeReason)},e.call(a,{type:"websocket"})}(i,l,s)}catch(e){a(l,e,"websocket")}}}new BroadcastChannel("absent-mux").postMessage({type:"refreshPort"}),self.onconnect=
+const ADBLOCK_PATTERNS = [
+    "googlesyndication.com","googleadservices.com","doubleclick.net","adnxs.com",
+    "amazon-adsystem.com","rubiconproject.com","pubmatic.com","criteo.com","openx.net",
+    "taboola.com","outbrain.com","moatads.com","casalemedia.com","adsafeprotected.com",
+    "chartbeat.com","scorecardresearch.com","quantserve.com","krxd.net","demdex.net",
+    "advertising.com","adtechus.com","unityads.unity3d.com","facebook.com/tr",
+    "facebook.com/ads","graph.facebook.com/pixel","ads-api.twitter.com",
+    "analytics.twitter.com","youtube.com/api/stats/ads","youtube.com/pagead",
+    "youtube.com/get_midroll"
+];
+
+function isAdBlocked(url) {
+    const s = url.toString();
+    return ADBLOCK_PATTERNS.some(p => s.includes(p));
+}
+
+const swPath = self.location.pathname;
+const basePath = swPath.substring(0, swPath.lastIndexOf('/') + 1);
+self.basePath = basePath;
+
+self.$scramjet = {
+    files: {
+        wasm: "https://cdn.jsdelivr.net/gh/Destroyed12121/Staticsj@main/JS/scramjet.wasm.wasm",
+        sync: "https://cdn.jsdelivr.net/gh/Destroyed12121/Staticsj@main/JS/scramjet.sync.js"
+    }
+};
+
+importScripts("https://cdn.jsdelivr.net/gh/Destroyed12121/Staticsj@main/JS/scramjet.all.js");
+importScripts("https://cdn.jsdelivr.net/npm/@mercuryworkshop/bare-mux/dist/index.js");
+
+const { ScramjetServiceWorker } = $scramjetLoadWorker();
+const scramjet = new ScramjetServiceWorker({
+    prefix: basePath + "scramjet/"
+});
+
+self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+
+let wispConfig = { wispurl: null, servers: [], autoswitch: true };
+
+async function pingServer(url) {
+    return new Promise(resolve => {
+        const start = Date.now();
+        try {
+            const ws = new WebSocket(url);
+            const t = setTimeout(() => { try { ws.close(); } catch {} resolve({ url, success: false, latency: null }); }, 3000);
+            ws.onopen = () => { clearTimeout(t); try { ws.close(); } catch {} resolve({ url, success: true, latency: Date.now() - start }); };
+            ws.onerror = () => { clearTimeout(t); resolve({ url, success: false, latency: null }); };
+        } catch { resolve({ url, success: false, latency: null }); }
+    });
+}
+
+function notifyClients(msg) {
+    self.clients.matchAll().then(cs => cs.forEach(c => c.postMessage(msg)));
+}
+
+async function proactiveCheck() {
+    if (!wispConfig.autoswitch || !wispConfig.servers?.length) return;
+    const results = await Promise.all(wispConfig.servers.map(s => pingServer(s.url)));
+    const currentOk = results.find(r => r.url === wispConfig.wispurl)?.success;
+    if (!currentOk) {
+        const best = results.filter(r => r.success).sort((a,b) => a.latency - b.latency)[0];
+        if (best) {
+            wispConfig.wispurl = best.url;
+            notifyClients({ type: 'wispChanged', url: best.url, name: wispConfig.servers.find(s => s.url === best.url)?.name || 'Server', latency: best.latency });
+        }
+    }
+}
+
+self.addEventListener("message", ({ data }) => {
+    if (data.type === "config") {
+        if (data.wispurl) wispConfig.wispurl = data.wispurl;
+        if (data.servers?.length) { wispConfig.servers = data.servers; if (wispConfig.autoswitch) setTimeout(proactiveCheck, 500); }
+        if (typeof data.autoswitch !== 'undefined') wispConfig.autoswitch = data.autoswitch;
+    } else if (data.type === "ping") {
+        pingServer(wispConfig.wispurl).then(r => notifyClients({ type: 'pingResult', ...r }));
+    } else if (data.type === "extensions.update") {
+        self.absentExtensions = data.extensions || [];
+    }
+});
+
+self.addEventListener("fetch", event => {
+    if (isAdBlocked(event.request.url)) {
+        event.respondWith(new Response(null, { status: 204 }));
+        return;
+    }
+    event.respondWith((async () => {
+        await scramjet.loadConfig();
+        if (scramjet.route(event)) return scramjet.fetch(event);
+        return fetch(event.request);
+    })());
+});

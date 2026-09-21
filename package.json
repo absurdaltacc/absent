@@ -1,0 +1,14 @@
+{
+  "name": "absent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Absent — web proxy shell",
+  "scripts": {
+    "vendor": "mkdir -p baremux epoxy && cp node_modules/@mercuryworkshop/bare-mux/dist/worker.js baremux/worker.js && cp node_modules/@mercuryworkshop/epoxy-transport/dist/index.mjs epoxy/index.mjs",
+    "serve": "npx serve ."
+  },
+  "dependencies": {
+    "@mercuryworkshop/bare-mux": "^2.1.7",
+    "@mercuryworkshop/epoxy-transport": "^2.1.7"
+  }
+}
